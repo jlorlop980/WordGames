@@ -38,8 +38,15 @@ public class EquipoController {
 
     @PostMapping("/equipos")
     public ResponseEntity<?> addTeam(@RequestBody Equipo newTeam){
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(equipoRepo.save(newTeam));
+        //solo controlamos el nombre ya que los puntos van a ser 0 ya que es un equipo nuevo y el logo puede ser null
+        if(newTeam.getNombre()!=null){
+            //añadimos esto para que no se intente crear u equipo con muchos puntos en caso de querer añadir puntos se deberia hacer un put
+            newTeam.setPuntos(0L);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(equipoRepo.save(newTeam));
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @DeleteMapping("/equipos/{id}")
@@ -58,11 +65,14 @@ public class EquipoController {
     @PutMapping("equipos/{id}")
     public ResponseEntity<?> updateTeam(@RequestBody Equipo teamNewData, @PathVariable Long id){
         Equipo team = equipoRepo.findById(id).orElse(null);
-
+        //En el caso que no exista el equipo a modificar no se modificará y se enviara un not found
         if(team == null){
             return ResponseEntity.notFound().build();
         }
-
+        //En este caso sí podremos modificar los puntos (endPoint que usaré más adelante
+        if (teamNewData.getPuntos() !=null && teamNewData.getPuntos()>=0){
+            team.setPuntos(teamNewData.getPuntos());
+        }
         if (teamNewData.getNombre() != null)
             team.setNombre(teamNewData.getNombre());
 

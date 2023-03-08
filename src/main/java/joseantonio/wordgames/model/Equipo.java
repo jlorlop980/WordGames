@@ -16,7 +16,7 @@ public class Equipo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private int puntos;
+    private Long puntos;
     private String logo = null;
 
 }
