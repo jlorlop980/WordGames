@@ -16,12 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JugadorController {
 
-    private final JugadorRepo jugadoRepo;
+    private final JugadorRepo jugadorRepo;
     private final EquipoRepo equipoRepo;
 
     @GetMapping("/jugadores")
     public ResponseEntity<?> getAllPlayers(){
-        List<Jugador> allPlayers = jugadoRepo.findAll();
+        List<Jugador> allPlayers = jugadorRepo.findAll();
 
         if(allPlayers.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -32,7 +32,7 @@ public class JugadorController {
 
     @GetMapping("/jugadores/{id}")
     public ResponseEntity<?> getPlayer(@PathVariable Long id){
-        Jugador player = jugadoRepo.findById(id).orElse(null);
+        Jugador player = jugadorRepo.findById(id).orElse(null);
 
         return (player == null) ?
                 ResponseEntity.notFound().build() :
@@ -44,69 +44,87 @@ public class JugadorController {
     public ResponseEntity<?> addPlayer(@RequestBody NewJugadorDTO newPlayer){
 
         Jugador nuevoJugador = new Jugador();
-        Equipo defaultTeam = equipoRepo.findById(8L).orElse(null);
+        Equipo equipo =null; //empieza en null en caso de que no se proporcione id de equipo en el post se le asigna un equipo null
+        if (newPlayer.getEquipo_id()!=null) {
+            equipo = equipoRepo.findById(newPlayer.getEquipo_id()).orElse(null);
+        }
 
-        if(newPlayer.getNombre() != null
-                && (newPlayer.getAdmin() == 1 || newPlayer.getAdmin() == 0)
-                && newPlayer.getClave() != null){
+        if(newPlayer.getNombre() != null  && newPlayer.getClave() != null){
 
             nuevoJugador.setNombre(newPlayer.getNombre());
-            nuevoJugador.setEquipo(defaultTeam);
+            nuevoJugador.setEquipo(equipo); //si el id de equipo no existe simplemente no se le añadira equipo, es decir se le introducirá el valor null en equipo
             nuevoJugador.setClave(newPlayer.getClave());
             nuevoJugador.setAvatar(newPlayer.getAvatar());
+            //en el caso que no se pase admin, o se pase un valor incorrecto se le asignara el valor por defecto 0,(no admin)
+            if (newPlayer.getAdmin() == 1 || newPlayer.getAdmin() == 0){
+                nuevoJugador.setAdmin(newPlayer.getAdmin());
+            }else{
+                nuevoJugador.setAdmin(0);
+            }
+            nuevoJugador.setAdmin(newPlayer.getAdmin());
+            nuevoJugador.setPuntos(0);
 
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(jugadoRepo.save(nuevoJugador));
+                    .body(jugadorRepo.save(nuevoJugador));
 
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @DeleteMapping("/jugadores/{id}")
     public ResponseEntity<?> deleteTeam(@PathVariable Long id){
-        Jugador deletedPlayer = jugadoRepo.findById(id).orElse(null);
+        Jugador deletedPlayer = jugadorRepo.findById(id).orElse(null);
 
         if(deletedPlayer == null){
             return ResponseEntity.notFound().build();
         }
 
-        jugadoRepo.deleteById(id);
+        jugadorRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(deletedPlayer);
     }
 
+    //Utilizo new player dto aqui tambien, ya que realmente serian los mismos datos, y asi evito crear una clase para nada, de momento al menos
     @PutMapping("jugadores/{id}")
-    public ResponseEntity<?> updateTeam(@RequestBody NewJugadorDTO playerNewData, @PathVariable Long id){
-        Jugador modifiedPlayer = jugadoRepo.findById(id).orElse(null);
-        if(playerNewData.getEquipo_id() != null){
-            Equipo team = equipoRepo.findById(playerNewData.getEquipo_id()).orElse(null);
-            if(team != null){
-                modifiedPlayer.setEquipo(team);
-            }
-        }
+    public ResponseEntity<?> updateTeam(@RequestBody NewJugadorDTO modifiedData, @PathVariable Long id){
+        Jugador modifiedPlayer = jugadorRepo.findById(id).orElse(null);
 
+        //En el caso que no exista el jugador que se quiera modificar se terminara la peticion con un not found
         if(modifiedPlayer == null){
             return ResponseEntity.notFound().build();
         }
 
+        if(modifiedData.getEquipo_id() != null){
+            Equipo team = equipoRepo.findById(modifiedData.getEquipo_id()).orElse(null);
+            //aqui solo modificamos el equipo si existe, debajo gestiono la opcion de que se elimine el equipo del jugador
+            if(team != null){
+                modifiedPlayer.setEquipo(team);
+            }
+        }
+        //aqui compruebo para eliminar el equipo del jugador se debe enviar especificamente un 0 en el id del equipo
+        if(modifiedData.getEquipo_id()==0){
+            Equipo equipoNull=null;
+            modifiedPlayer.setEquipo(equipoNull);
+        }
 
-        if (playerNewData.getAdmin() == 0 || playerNewData.getAdmin() == 1)
-            modifiedPlayer.setAdmin(playerNewData.getAdmin());
 
-        if (playerNewData.getNombre() != null)
-            modifiedPlayer.setNombre(playerNewData.getNombre());
+        if (modifiedData.getAdmin() == 0 || modifiedData.getAdmin() == 1)
+            modifiedPlayer.setAdmin(modifiedData.getAdmin());
 
-        if (playerNewData.getClave() != null)
-            modifiedPlayer.setClave(playerNewData.getClave());
+        if (modifiedData.getNombre() != null)
+            modifiedPlayer.setNombre(modifiedData.getNombre());
 
-        if (playerNewData.getAvatar() != null)
-            modifiedPlayer.setAvatar(playerNewData.getAvatar());
+        if (modifiedData.getClave() != null)
+            modifiedPlayer.setClave(modifiedData.getClave());
 
-        if (playerNewData.getPuntos() != null)
-            modifiedPlayer.setPuntos((playerNewData.getPuntos().intValue()));
+        if (modifiedData.getAvatar() != null)
+            modifiedPlayer.setAvatar(modifiedData.getAvatar());
 
-        jugadoRepo.save(modifiedPlayer);
+        if (modifiedData.getPuntos() != null)
+            modifiedPlayer.setPuntos((modifiedData.getPuntos().intValue()));
+
+        jugadorRepo.save(modifiedPlayer);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(modifiedPlayer);
