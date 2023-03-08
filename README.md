@@ -40,4 +40,6 @@ Primera entrega del trabajo de los juegos de palabras en la que se encuentra el 
 - El .sql se encuentra en la primera primera entrega (modelo para juego de palabras)
 - Ya se encuentra el archivo application.properties solo es necesaria cambiar la añadir la contraseña
 - El puerto usado es el 3009
+- Los peticiones de Insomnia están en la ultima entrega
+- Los datos de prueba estan en la entrega del modelo
 
