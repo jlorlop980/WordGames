@@ -2,12 +2,15 @@ package joseantonio.wordgames.controller;
 
 
 import joseantonio.wordgames.model.Equipo;
+import joseantonio.wordgames.model.Jugador;
 import joseantonio.wordgames.repo.EquipoRepo;
+import joseantonio.wordgames.repo.JugadorRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -15,6 +18,7 @@ import java.util.List;
 public class EquipoController {
 
     private final EquipoRepo equipoRepo;
+    private final JugadorRepo jugadorRepo;
 
     @GetMapping("/equipos")
     public ResponseEntity<?> getAllTeams(){
@@ -34,6 +38,30 @@ public class EquipoController {
         return (team == null) ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(team);
+    }
+
+    @GetMapping("/equipos/jugadores/{id}")
+    public ResponseEntity<?> getTeamPlayers(@PathVariable Long id){
+        //primero compruebo si existe el equipo que se quiere buscar
+        Equipo equipo = equipoRepo.findById(id).orElse(null);
+        if (equipo==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        List<Jugador> allPlayers = jugadorRepo.findAll();
+        List<Jugador> teamPlayers =new ArrayList<Jugador>();
+
+        for( Jugador player : allPlayers){
+            if (player.getEquipo()!=null) {
+                if (player.getEquipo().getId() == id) {
+                    teamPlayers.add(player);
+                }
+            }
+        }
+
+        return teamPlayers.isEmpty() ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(teamPlayers);
     }
 
     @PostMapping("/equipos")

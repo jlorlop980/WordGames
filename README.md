@@ -20,13 +20,14 @@ Primera entrega del trabajo de los juegos de palabras en la que se encuentra el 
 -------
 ### *Equipo*
 #### *EndPoints*
-| Endpoint          | Resultado                                    | Método  |
-|-------------------|----------------------------------------------|:-------:|
-| `/equipos`        | Muestra todos los equipos                    |   GET   |
-| `/equipos/{id}`   | Mostrar el equipo a partir de un id `{id}`   |   GET   |
-| `/equipos`        | Añadir un equipo                             |  POST   |
-| `/equipos/{id}`   | Eliminar un equipo                           | DELETE  |
-| `/equipos/{id}`   | Modificar un equipo                          |   PUT   |
+| Endpoint                  | Resultado                                   | Método |
+|---------------------------|---------------------------------------------|:------:|
+| `/equipos`                | Muestra todos los equipos                   |  GET   |
+| `/equipos/{id}`           | Mostrar el equipo a partir de un id `{id}`  |  GET   |
+| `/equipos/jugadores/{id}` | Muestra los jugadores de un equipo concreto |  GET   |
+| `/equipos`                | Añadir un equipo                            |  POST  |
+| `/equipos/{id}`           | Eliminar un equipo                          | DELETE |
+| `/equipos/{id}`           | Modificar un equipo                         |  PUT   |
 
 
 #### *Control de errores*
