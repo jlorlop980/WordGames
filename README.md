@@ -29,6 +29,7 @@ Primera entrega del trabajo de los juegos de palabras en la que se encuentra el 
 | `/equipos/{id}`           | Eliminar un equipo                          | DELETE |
 | `/equipos/{id}`           | Modificar un equipo                         |  PUT   |
 
+_Para eliminar el equipo de un jugador se haría mediante el put indicando 0 en el id de equipo_
 
 #### *Control de errores*
 - Se controla si el objeto está completo es decir, tiene todos los campos necesario, (los puntos siempre son 0 al crearse ya que un equipo nuevo no tendra puntos)

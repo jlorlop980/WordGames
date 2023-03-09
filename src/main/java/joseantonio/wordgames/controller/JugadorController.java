@@ -34,6 +34,7 @@ public class JugadorController {
     public ResponseEntity<?> getPlayer(@PathVariable Long id){
         Jugador player = jugadorRepo.findById(id).orElse(null);
 
+        //comprobamos que existe el jugador al que se quiere acceder
         return (player == null) ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(player);
@@ -44,17 +45,18 @@ public class JugadorController {
     public ResponseEntity<?> addPlayer(@RequestBody NewJugadorDTO newPlayer){
 
         Jugador nuevoJugador = new Jugador();
-        Equipo equipo =null; //empieza en null en caso de que no se proporcione id de equipo en el post se le asigna un equipo null
+        Equipo equipo =null; //empieza en null en caso de que no se proporcione id de equipo en el post se le asigna un equipo null es decir sin equipo
         if (newPlayer.getEquipo_id()!=null) {
             equipo = equipoRepo.findById(newPlayer.getEquipo_id()).orElse(null);
         }
 
-        if(newPlayer.getNombre() != null  && newPlayer.getClave() != null){
+        if(newPlayer.getNombre() != null  && newPlayer.getClave() != null){ //solo nos son necesarios estos 2 campos a la hora de crear un jugador
 
             nuevoJugador.setNombre(newPlayer.getNombre());
             nuevoJugador.setEquipo(equipo); //si el id de equipo no existe simplemente no se le añadira equipo, es decir se le introducirá el valor null en equipo
             nuevoJugador.setClave(newPlayer.getClave());
-            nuevoJugador.setAvatar(newPlayer.getAvatar());
+            nuevoJugador.setAvatar(newPlayer.getAvatar()); //en el caso que no se haya introducido simplemente sera null, es decir que no tendra avatar
+
             //en el caso que no se pase admin, o se pase un valor incorrecto se le asignara el valor por defecto 0,(no admin)
             if (newPlayer.getAdmin() == 1 || newPlayer.getAdmin() == 0){
                 nuevoJugador.setAdmin(newPlayer.getAdmin());
@@ -76,6 +78,7 @@ public class JugadorController {
     public ResponseEntity<?> deleteTeam(@PathVariable Long id){
         Jugador deletedPlayer = jugadorRepo.findById(id).orElse(null);
 
+        //comprobamos que existe el jugador
         if(deletedPlayer == null){
             return ResponseEntity.notFound().build();
         }
@@ -85,7 +88,7 @@ public class JugadorController {
                 .body(deletedPlayer);
     }
 
-    //Utilizo new player dto aqui tambien, ya que realmente serian los mismos datos, y asi evito crear una clase para nada, de momento al menos
+    //Utilizo new player dto aqui tambien, ya que realmente serian los mismos datos, y asi evito crear una clase extra con exactamente los mismos datos, de momento al menos
     @PutMapping("jugadores/{id}")
     public ResponseEntity<?> updateTeam(@RequestBody NewJugadorDTO modifiedData, @PathVariable Long id){
         Jugador modifiedPlayer = jugadorRepo.findById(id).orElse(null);

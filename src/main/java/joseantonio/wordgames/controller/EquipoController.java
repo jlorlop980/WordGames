@@ -51,6 +51,7 @@ public class EquipoController {
         List<Jugador> allPlayers = jugadorRepo.findAll();
         List<Jugador> teamPlayers =new ArrayList<Jugador>();
 
+        //voy comprobando con el for cada jugador primero si tiene equipo y en caso afirmativo, compruevo si el id coincide y entonces lo añaddo al la lista
         for( Jugador player : allPlayers){
             if (player.getEquipo()!=null) {
                 if (player.getEquipo().getId() == id) {
@@ -59,6 +60,7 @@ public class EquipoController {
             }
         }
 
+        //si esta vacia la lista es que no hay ningun jugador en ese equipo
         return teamPlayers.isEmpty() ?
                 ResponseEntity.notFound().build() :
                 ResponseEntity.ok(teamPlayers);
@@ -81,6 +83,7 @@ public class EquipoController {
     public ResponseEntity<?> deleteTeam(@PathVariable Long id){
         Equipo deletedTeam = equipoRepo.findById(id).orElse(null);
 
+        //comprobamos que existe el equipo a borrar primero
         if(deletedTeam == null){
             return ResponseEntity.notFound().build();
         }
