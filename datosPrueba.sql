@@ -1,0 +1,13 @@
+INSERT INTO equipo (nombre, puntos, logo) VALUES ('RavenClaw', 0, 'img/logo1.jpg');
+INSERT INTO equipo (nombre, puntos, logo) VALUES ('Gryffindor', 0, 'img/logo2.jpg');
+INSERT INTO equipo (nombre, puntos, logo) VALUES ('Hufflepuff', 0, 'img/logo3.jpg');
+INSERT INTO equipo (nombre, puntos, logo) VALUES ('Slytherin', 0, 'img/logo4.jpg');
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (0, 'Harry Potter', 'harry123', 'img/avatar1.jpg', 0, 2);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (1, 'Severus Snape', 'snape456', NULL, 0, 4);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (0, 'Ron Weasley', 'ron789', 'img/avatar2.jpg', 0, 2);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (1, 'Minerva McGonagall', 'mcgonagall101', NULL, 0, 3);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (0, 'Hermione Granger', 'hermione321', 'img/avatar3.jpg', 0, 2);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (1, 'Draco Malfoy', 'malfoy789', NULL, 0, 4);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (0, 'Neville Longbottom', 'neville456', 'img/avatar4.jpg', 0, 2);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (1, 'Ginny Weasley', 'ginny123', 'img/avatar5.jpg', 0, 2);
+INSERT INTO jugador (admin, nombre, clave, avatar, puntos, equipo_id) VALUES (1, 'Luna Lovegood', 'ginny123', 'img/avatar5.jpg', 0, 1);

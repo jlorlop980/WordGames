@@ -97,7 +97,7 @@ public class JugadorController {
 
         if(modifiedData.getEquipo_id() != null){
             Equipo team = equipoRepo.findById(modifiedData.getEquipo_id()).orElse(null);
-            //aqui solo modificamos el equipo si existe, debajo gestiono la opcion de que se elimine el equipo del jugador
+            //aqui solo modificamos el equipo si existe, debajo gestiono la opcion de que se elimine el equipo del jugador si se le pasa 0 como equipo_id
             if(team != null){
                 modifiedPlayer.setEquipo(team);
             }
