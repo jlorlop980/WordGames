@@ -1,16 +1,19 @@
 package joseantonio.wordgames.controller;
 
+import joseantonio.wordgames.DTO.ClasificacionDTO;
 import joseantonio.wordgames.DTO.NewJugadorDTO;
 import joseantonio.wordgames.model.Equipo;
 import joseantonio.wordgames.model.Jugador;
 import joseantonio.wordgames.repo.EquipoRepo;
 import joseantonio.wordgames.repo.JugadorRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +42,23 @@ public class JugadorController {
                 ResponseEntity.ok(player);
     }
 
+    @GetMapping("/jugadores/ranking")
+    public ResponseEntity<?> getAllPlayersOrderByScore() {
+        List<ClasificacionDTO> allPlayers = jugadorRepo.findAll(Sort.by(Sort.Direction.DESC, "puntos"))
+                .stream()
+                .map(jugador -> new ClasificacionDTO(
+                        jugador.getNombre(),
+                        jugador.getPuntos(),
+                        jugador.getAvatar(),
+                        jugador.getEquipo() != null ? jugador.getEquipo().getNombre() : null))
+                .collect(Collectors.toList());
+
+        if (allPlayers.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(allPlayers);
+    }
 
     @PostMapping("/jugadores")
     public ResponseEntity<?> addPlayer(@RequestBody NewJugadorDTO newPlayer){
