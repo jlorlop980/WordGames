@@ -1,38 +1,21 @@
 # API Word Games
-## Entrega 2 (Crud Partida y datos de juego)
-Primera entrega del trabajo de los juegos de palabras en la que se encuentra el crud de las entidades partida y jugador.
-### *Jugador*
+## Entrega 3 (Peticiones de palabras)
+Ultima entrega con las peticiones de las palabras
+### *Palabras*
 #### EndPoints
-| Endpoint             | Resultado                                        | Método |
-|----------------------|--------------------------------------------------|:------:|
-| `/jugadores/ranking` | Muestra todos los jugadores ordenador por puntos |  GET   |
-
-
-Se ha añadido el endpoint para ordenar los jugadores por puntuación
-
--------
-### *Juego*
-#### *EndPoints*
-| Endpoint       | Resultado                            | Método |
-|----------------|--------------------------------------|:------:|
-| `/juegos`      | Muestra todos los juegos             |  GET   |
-| `/juegos/{id}` | Mostrar un único juego por su `{id}` |  GET   |
-
----------
-### *Partida*
-#### *EndPoints*
-| Endpoint          | Resultado                           | Método |
-|-------------------|-------------------------------------|:------:|
-| `/partidas`       | Muestra todas las partidas          |  GET   |
-| `/partidas/{id}`  | Muestra una partida por su `{id}`   |  GET   |
-| `/partidas`       | Crear una partida                   |  POST  |
-| `/partidas/{id}`  | Eliminar un partida                 | DELETE |
-
+| Endpoint                         | Resultado                                                | Método |
+|----------------------------------|----------------------------------------------------------|:------:|
+| `/palabras`                      | Muestra todas las palabras                               |  GET   |
+| `/palabras/aleatoria`            | Devuelve una palabra aleatoria                           |  GET   |
+| `/palabras/aleatoria/{cantidad}` | Devuelve un numero indicado de palabras aleatorias       |  GET   |
+| `/palabras/terminan/{cadena}`    | Muestra las palabras que acaban con la cadena indicada   |  GET   |
+| `/palabras/empiezan/{cadena}`    | Muestra las palabras que empiezan con la cadena indicada |  GET   |
+| `/palabras/contienen/{cadena}`   | Muestra las palabras que contienen una cadena  indicada  |  GET   |
 
 
 ### *Datos importantes*
 - Ya se encuentra el archivo application.properties solo es necesaria cambiar la añadir la contraseña
 - El puerto usado es el 3009
-- Los peticiones de Insomnia están en está misma entrega (Anteriores + las nuevas)
-- Los scripts .sql con la base de datos y los datos de prueba están en esta entrega con solo datos de prueba de juego y partida
+- Los peticiones de Insomnia están en está misma entrega (Solo palabras ya que al no alterar nada de las otras no creo que haga falta)
+- Las palabras se encuentran en la carpeta resources static.
 
